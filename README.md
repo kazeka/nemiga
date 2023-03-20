@@ -7,7 +7,7 @@ pipx install -r requirements.txt
 
 
 ```
-sqlite-utils insert mmm.db users data.json
+sqlite-utils insert mmm.db users data.json --pk id
 ```
 
 ```
