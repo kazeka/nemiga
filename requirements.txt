@@ -1,2 +1,4 @@
 datasette
 sqlite-utils
+networkx
+pandas
