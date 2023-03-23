@@ -25,3 +25,5 @@ datasette install \
 ```bash
 datasette mmm.db
 ```
+
+A popup inside codespaces in-browser vscode will ask to open redirected port.
