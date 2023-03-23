@@ -1,4 +1,5 @@
 datasette
 sqlite-utils
+sqlalchemy
 networkx
 pandas
