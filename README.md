@@ -1,16 +1,11 @@
 Start codespace as per https://datasette.io/tutorials/codespaces
 
 
-```
+```bash
 pipx install -r requirements.txt
 ```
 
-
-```
-sqlite-utils insert mmm.db users data.json --pk id
-```
-
-```
+```bash
 datasette install \
   datasette-vega \
   datasette-cluster-map \
@@ -18,4 +13,13 @@ datasette install \
   datasette-configure-fts \
   datasette-edit-schema \
   datasette-upload-csvs
+```
+
+```bash
+./preprocess.py
+```
+
+
+```bash
+datasette mmm.db
 ```
