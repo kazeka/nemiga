@@ -17,7 +17,7 @@ def main():
             return 1
         else:
             team_sums[d['id']] = [[i['id'] for i in d['refs']], sum([sum_teams(i, team_sums) for i in d['refs']])]
-            return sum([sum_teams(i, team_sums) for i in d['refs']])
+            return 1 + sum([sum_teams(i, team_sums) for i in d['refs']])
 
     sum_teams(data, team_sums)
 
