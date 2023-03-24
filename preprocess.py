@@ -10,16 +10,16 @@ def main():
     with open('data.json', 'r') as fp:
         data = json.load(fp)
 
-    team_sums = {}
-    def sum_teams(d, team_sums):
+    def _sumup_teams(d, team_sums):
         if not d['refs']:
             team_sums[d['id']] = [d['refs'], 1]
             return 1
         else:
-            team_sums[d['id']] = [[i['id'] for i in d['refs']], sum([sum_teams(i, team_sums) for i in d['refs']])]
-            return 1 + sum([sum_teams(i, team_sums) for i in d['refs']])
+            team_sums[d['id']] = [[i['id'] for i in d['refs']], sum([_sumup_teams(i, team_sums) for i in d['refs']])]
+            return 1 + sum([_sumup_teams(i, team_sums) for i in d['refs']])
 
-    sum_teams(data, team_sums)
+    team_sums = {}
+    _sumup_teams(data, team_sums)
 
 
     df = pd.DataFrame.from_dict({
