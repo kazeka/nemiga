@@ -1,5 +1,6 @@
 Start codespace as per https://datasette.io/tutorials/codespaces
 
+Setup the dependencies:
 
 ```bash
 python3 -m venv .venv
@@ -17,13 +18,23 @@ datasette install \
   datasette-upload-csvs
 ```
 
+Initialize the DB:
+
 ```bash
 ./preprocess.py
 ```
 
+View the DB:
 
 ```bash
 datasette mmm.db
 ```
 
 A popup inside codespaces in-browser vscode will ask to open redirected port.
+
+
+Launch the app:
+```bash
+uvicorn mmm:app --reload
+```
+
