@@ -1,5 +1,7 @@
 datasette
+fastapi
 sqlite-utils
 sqlalchemy
 networkx
 pandas
+uvicorn
