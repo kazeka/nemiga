@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 import json
-import networkx
 import pandas as pd
 import sqlalchemy
+import sys
 
 
-def main():
-    with open('data.json', 'r') as fp:
+def main(fname='data.json'):
+    with open(fname, 'r') as fp:
         data = json.load(fp)
 
     def _sumup_teams(d, team_sums):
@@ -60,17 +60,30 @@ def main():
         if len(V5 & refs) >= 3:
             df.at[index, 'level'] = 'V6'
 
+    # prepare refs table
+    db_refs = []
+    for i in df.itertuples():
+        if i.refs:
+            for j in i.refs:
+                db_refs.append([i.id, j])
+
+
     # export to sqlite
     engine = sqlalchemy.create_engine('sqlite:///./mmm.db')
-    db_df = df.drop(columns=['refs'])
-    db_df.to_sql('users', con=engine, if_exists='replace', dtype={
+    db_users = df.drop(columns=['refs'])
+    db_users.to_sql('users', con=engine, if_exists='replace', dtype={
         'id': sqlalchemy.Text,
         'team_size': sqlalchemy.Integer,
         'level': sqlalchemy.Text,
     })
+    
+    pd.DataFrame(db_refs, columns=['origin', 'dst']).to_sql('refs', con=engine, if_exists='replace')
 
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    if len(sys.argv) > 1:
+        raise SystemExit(main(sys.argv[1]))
+    else:
+        raise SystemExit(main())
