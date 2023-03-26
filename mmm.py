@@ -2,6 +2,8 @@
 Made with ChatGPT
 '''
 
+import functools
+
 from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 
@@ -34,7 +36,13 @@ class TeamManager():
 
         # DEBUG: save G
         nx.write_gpickle(self.G, 'G.pickle')
-    
+
+
+    @property
+    @functools.lru_cache(maxsize=None)
+    def root_node_id(self):
+        return [n for n, d in self.G.in_degree() if d==0][0]
+
 
     def get_payout(self, level, depth):
         if depth == 1:
@@ -106,13 +114,15 @@ class TeamManager():
             return {'user_id': member_id, 'level': 'No such member'}
         
         level = nx.get_node_attributes(self.G, 'level')
-        resp = [{'user_id': member_id, 'level': level[member_id], 'amount': -120}]
-        payout_depth = 1
-        for p in self.G.predecessors(member_id):
-            payout = self.get_payout(level[p], payout_depth)
+        resp, payout_depth = list(), 0
+        for p in list(reversed(nx.shortest_path(self.G, source=self.root_node_id, target=member_id))):
+            if payout_depth == 0:
+                resp.append({'user_id': member_id, 'level': level[member_id], 'amount': -120})
+            else:
+                payout = self.get_payout(level[p], payout_depth)
+                resp.append({'user_id': p, 'level': level[p], 'amount': payout})
             payout_depth += 1
-            resp.append({'user_id': p, 'level': level[p], 'amount': payout})
-
+            
         return resp
         
 
@@ -122,10 +132,8 @@ app = FastAPI()
 
 @app.get('/')
 def root():
-    # TODO: fix sorting
     global mngr
-    level = nx.get_node_attributes(mngr.G, 'level')
-    return RedirectResponse(f'/get_level_for/{max(level)}')
+    return RedirectResponse(f'/get_level_for/{mngr.root_node_id}')
 
 @app.get('/get_level_for/{user_id}')
 def get_level_for(user_id: str):
