@@ -33,10 +33,10 @@ Start Datasette to view SQLite DB:
 datasette mmm.db &
 ```
 
-A popup inside codespaces web UI will ask to open redirected port 8001.
+A popup inside codespaces web UI will ask to open Datasette at redirected port 8001.
 
 
-Launch the FastAPI app at port 8000:
+Launch the FastAPI app at default port 8000:
 ```bash
 uvicorn mmm:app --reload &
 ```
@@ -50,6 +50,10 @@ The app provides the following endpoints:
 ```
 
 More info about the API is available at the `/docs` endpoint.
+
+### Need for clarification
+I implemented skipping payouts for users with higher level but lower down the recommendation chain in pairwise manner.
+Is this the intention? An alternative would be to look at the chain as a whole.
 
 ### Highlights of the implementation
 Datasette provides an interface for exploring underlying SQLite DB. FastAPI was chosen for clarity and readability.
