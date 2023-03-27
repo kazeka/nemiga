@@ -23,18 +23,36 @@ Initialize the DB:
 ```bash
 ./preprocess.py
 ```
+The script `preprocess.py` accepts a single filename as argument. The default is `data.json`, can also be used as 
+`./preprocess.py data_new.json`.
 
-View the DB:
+
+Start Datasette to view SQLite DB:
 
 ```bash
-datasette mmm.db
+datasette mmm.db &
 ```
 
-A popup inside codespaces in-browser vscode will ask to open redirected port.
+A popup inside codespaces web UI will ask to open redirected port 8001.
 
 
-Launch the app:
+Launch the FastAPI app at port 8000:
 ```bash
-uvicorn mmm:app --reload
+uvicorn mmm:app --reload &
 ```
 
+The app provides the following endpoints:
+```
+/
+/docs
+/get_level_for/{user_id}
+/get_payouts_for/{user_id}
+```
+
+More info about the API is available at the `/docs` endpoint.
+
+### Highlights of the implementation
+Datasette provides an interface for exploring underlying SQLite DB. FastAPI was chosen for clarity and readability.
+NetworkX was chosen to represent the referential tree as directed graph because it provides sophisticated graph API.
+Future work includes adding endpoint to extend the referential tree by adding new users at the appropriate nodes, 
+testing module, and refactoring.
