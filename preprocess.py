@@ -18,7 +18,7 @@ def main(fname='data.json'):
             team_sums[d['id']] = [[i['id'] for i in d['refs']], sum([_sumup_teams(i, team_sums) for i in d['refs']])]
             return 1 + sum([_sumup_teams(i, team_sums) for i in d['refs']])
 
-    team_sums = {}
+    team_sums = dict()
     _sumup_teams(data, team_sums)
 
 
@@ -27,10 +27,10 @@ def main(fname='data.json'):
         'refs': [i[0] for i in team_sums.values()], 
         'team_size':  [i[1] for i in team_sums.values()]})
 
-    # check
-    df[df['id'].str.match('01GTXNX97R9RRQ4JYVECEVA081')]
-    df[df['id'].str.match('01GTXNX97R9RRQ4JYVECEVA081')]['refs'].str.len()
-    df[df['id'].str.match('01GTXNX97R9RRQ4JYVECEVA081')]['refs'].str.get(1)
+    # DEBUG: check
+    # df[df['id'].str.match('01GTXNX97R9RRQ4JYVECEVA081')]
+    # df[df['id'].str.match('01GTXNX97R9RRQ4JYVECEVA081')]['refs'].str.len()
+    # df[df['id'].str.match('01GTXNX97R9RRQ4JYVECEVA081')]['refs'].str.get(1)
 
     # assign levels
     df['level'] = ['V1'] * len(df)
