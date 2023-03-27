@@ -11,9 +11,11 @@ def main(fname='data.json'):
         data = json.load(fp)
 
     def _sumup_teams(d, team_sums):
+        # base case: size of team is 1
         if not d['refs']:
             team_sums[d['id']] = [d['refs'], 1]
             return 1
+        # recursive case: size of team is 1 + size of teams recommended by recommended users
         else:
             team_sums[d['id']] = [[i['id'] for i in d['refs']], sum([_sumup_teams(i, team_sums) for i in d['refs']])]
             return 1 + sum([_sumup_teams(i, team_sums) for i in d['refs']])
