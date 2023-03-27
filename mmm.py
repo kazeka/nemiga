@@ -35,7 +35,7 @@ class TeamManager():
         conn.close()
 
         # DEBUG: save G
-        nx.write_gpickle(self.G, 'G.pickle')
+        # nx.write_gpickle(self.G, 'G.pickle')
 
 
     @property
@@ -132,16 +132,24 @@ app = FastAPI()
 
 @app.get('/')
 def root():
+    '''Redirects to /get_level_for/{root_node_id}'''
     global mngr
     return RedirectResponse(f'/get_level_for/{mngr.root_node_id}')
 
 @app.get('/get_level_for/{user_id}')
 def get_level_for(user_id: str):
+    '''Returns JSON dict with keys user_id, level'''
     global mngr
     return mngr.get_level_for(user_id)
 
 
 @app.get('/get_payouts_for/{user_id}')
 def get_payouts_for(user_id: str):
+    '''
+    Returns JSON list of dicts, starting with $-120 for current user, then going up the recommendation chain.
+    Each dict in the list contains keys user_id, level, amount.
+    
+    Note: This endpoint is only meaningful for leaf nodes in the referential tree.
+    '''
     global mngr
     return mngr.get_payouts_for(user_id)
