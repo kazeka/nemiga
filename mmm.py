@@ -114,11 +114,16 @@ class TeamManager():
             return {'user_id': member_id, 'level': 'No such member'}
         
         level = nx.get_node_attributes(self.G, 'level')
+        references_chain = list(reversed(nx.shortest_path(self.G, source=self.root_node_id, target=member_id)))
         resp, payout_depth = list(), 0
-        for p in list(reversed(nx.shortest_path(self.G, source=self.root_node_id, target=member_id))):
+        for i, p in enumerate(references_chain):
             if payout_depth == 0:
                 resp.append({'user_id': member_id, 'level': level[member_id], 'amount': -120})
             else:
+                if i > 0:
+                    # do not pay out if user down the recommendation chain has attained higher level
+                    if level[references_chain[i-1]] > level[p]:
+                        continue
                 payout = self.get_payout(level[p], payout_depth)
                 resp.append({'user_id': p, 'level': level[p], 'amount': payout})
             payout_depth += 1
