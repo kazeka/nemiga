@@ -59,4 +59,4 @@ Is this the intention? An alternative would be to look at the chain as a whole.
 Datasette provides an interface for exploring underlying SQLite DB. FastAPI was chosen for clarity and readability.
 NetworkX was chosen to represent the referential tree as directed graph because it provides sophisticated graph API.
 Future work includes adding endpoint to extend the referential tree by adding new users at the appropriate nodes, 
-testing module, and refactoring.
+testing module, and refactoring (incl. DB).
